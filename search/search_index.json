@@ -1,0 +1,1 @@
+{"config":{"lang":["en"],"separator":"[\\s\\-]+","pipeline":["stopWordFilter"]},"docs":[{"location":"","title":"The Termina Book","text":"<p>Welcome to the documentation for the Termina Programming Language.</p>"}]}
