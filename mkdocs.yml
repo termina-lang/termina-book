@@ -1,4 +1,7 @@
 site_name: The Termina Book
 nav:
     - Home: index.md
-theme: material
+    - Installation: install.md
+theme: 
+  name: material
+  logo: assets/logo_termina.png
