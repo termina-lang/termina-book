@@ -1,7 +1,20 @@
 site_name: The Termina Book
+
 nav:
-    - Home: index.md
+  - Home: index.md
+  - Getting started:
     - Installation: install.md
+    - I'm alive: alive.md
+copyright: Copyright &copy; 2022 - 2025 The Termina Project Contributors
+
 theme: 
   name: material
   logo: assets/logo_termina.png
+
+markdown_extensions:
+  - pymdownx.highlight:
+      use_pygments: true
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
