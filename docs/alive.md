@@ -29,10 +29,10 @@ task class AliveClass {
 
     system_port : access SystemAPI;
 
-    action timeout(&priv self, _current_time : TimeVal) -> Result {
+    action timeout(&priv self, _current_time : TimeVal) -> Status<i32> {
 
         let msg : [char; 10] = "I'm alive!";
-        let ret : Result = Result::Ok;
+        let ret : Status<i32> = Success;
 
         self->system_port.println(10, &msg);
 
@@ -49,6 +49,7 @@ emitter timer : PeriodicTimer = {
     }
 };
 
+#[priority(10)]
 task alive_task : AliveClass = {
 
     timer_port <- timer,
