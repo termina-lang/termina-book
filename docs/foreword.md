@@ -1,0 +1,15 @@
+# Foreword
+
+Software has become the invisible backbone of spacecraft, aircraft, satellites, cars, and medical devices. These are systems where failure is not an option, where correctness, safety, and predictability matter more than raw performance or convenience. However, most of the tools we use to build such systems were not designed with these constraints in mind.  
+
+The Termina programming language was created to address this shortcoming. It is a language designed from scratch for critical real-time reactive embedded systems.
+
+- **Reactive programming model**: Software developed in Termina is structured around actions that are executed in response to both synchronous and asynchronous events. The language provides its own elements for expressing concurrency, such as tasks and handlers, as well as message queues for interconnecting active elements. It also provides shared resources that allow procedures to be defined and data to be accessed, in mutual exclusion, ensuring that there are no deadlocks by design.
+- **Determinism**: When developing real-time critical systems, it is crucial to apply design techniques and methodologies that allow verification that the real-time requirements imposed on software applications are met. Therefore, it is necessary to ensure that the developed system is deterministic and predictable. By design, the Termina language forces responses to events always to be finite, limiting the number of loop iterations and prohibiting recursion, and facilitating subsequent analysis and the obtention and measurement of the worst response times for the different sequences of actions in response to events.
+- **Memory safety guarantees**: the Termina language ensures the absence of memory errors such as null pointer dereferencing, use-after-free errors, and memory leaks, as well as other errors such as out-of-bounds array indexing. Dynamic memory management is carried out deterministically through the use of built-in memory pools.
+
+This book introduces Termina step by step. It assumes you are comfortable with programming in languages like C, Ada, or Rust, but not necessarily an expert in embedded real-time systems. Our goal is not only to teach you Termina as a language, but also to encourage a way of thinking about programming where safety and reliability are the default.  If you come from a background in C, you may find the restrictions unusual at first. If you are familiar with Ada/SPARK or Rust, you may recognize shared ideas but notice Termina's simpler, domain-specific design. Either way, as you progress, you will see how these design choices are not limitations but tools that enable more robust systems.  
+
+Whether you are a student, a researcher, or an engineer working on real-time embedded platforms, this book is your entry point into Termina. It will give you both the practical skills to write Termina programs and the conceptual understanding to reason about their safety.
+
+Welcome to Termina. Let’s build systems we can trust.

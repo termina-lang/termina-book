@@ -1,17 +1,17 @@
-# I'm alive
+# Hello, Real-Time World!
 
 The transpilation tool, in addition to performing code translation, is used to create new Termina projects. Thus, the tool supports different commands. In particular, the `new` command allows you to create a new project containing an initial directory tree and a project configuration file with default parameters.
 
-In our case, we are going to create a new project named `alive`. To do this, we will execute the following command from the terminal:
+In our case, we are going to create a new project named `hello_world`. To do this, we will execute the following command from the terminal:
 
 ```bash
-$ termina new alive
+$ termina new hello_world
 ```
 
-After executing the command, a new directory called `alive` containing the following elements will have been generated:
+After executing the command, a new directory called `hello_world` containing the following elements will have been generated:
 
 ```
-alive
+hello_world
     termina.yaml
     app/app.fin
     src
@@ -23,7 +23,7 @@ The file `termina.yaml` stores the project configuration parameters. The `app` d
 Next, we are going to modify the `app.fin` file, adding the following content:
 
 ```termina
-task class AliveClass {
+task class HelloWorldClass {
 
     timer_port : sink TimeVal triggers timeout;
 
@@ -31,10 +31,10 @@ task class AliveClass {
 
     action timeout(&priv self, _current_time : TimeVal) -> Status<i32> {
 
-        let msg : [char; 10] = "I'm alive!";
+        let msg : [char; 128] = "Hello, Real-Time World!";
         let ret : Status<i32> = Success;
 
-        self->system_port.println(10, &msg);
+        self->system_port.println(128, &msg);
 
         return ret;
 
@@ -50,7 +50,7 @@ emitter timer : PeriodicTimer = {
 };
 
 #[priority(10)]
-task alive_task : AliveClass = {
+task hello_world_task : HelloWorldClass = {
 
     timer_port <- timer,
     system_port <-> system_entry
@@ -70,12 +70,12 @@ Finally, we will generate the application code with the following commands:
 $ termina build
 ```
 
-If the command has been executed successfully, the output directory should contain the modules resulting from the transpilation. In order to compile and run the project, we will have to execute the following commands in the terminal:
+If the command has been executed successfully, the `output` directory should contain the modules resulting from the transpilation. In order to compile and run the project, we will have to execute the following commands in the terminal:
 
 ```bash
 $ cd output
 $ make
-$ ./bin/alive
+$ ./bin/hello_world
 ```
 
-The program will print the message “I'm alive!” on the screen every second. To exit, it will be necessary to interrupt the execution of the program by entering the key combination `Ctrl+C` in the terminal.
+The program will print the message “Hello, Real-Time World!” on the screen every second. To exit, it will be necessary to interrupt the execution of the program by entering the key combination `Ctrl+C` in the terminal.
