@@ -7,7 +7,24 @@ nav:
     - Installation: started/install.md
     - Hello, Real-Time World!: started/hello-world.md
   - Building our first application: tutorial.md
-copyright: Copyright &copy; 2022 - 2025 The Termina Project Contributors
+  - Language Basics:
+    - Types and Constants: basics/types.md
+    - Variables and Mutability: basics/variables.md
+    - Expressions and Operators: basics/expressions.md
+    - Control Flow: basics/control-flow.md
+    - Functions: basics/functions.md
+    - References: basics/references.md
+  - The Reactive Model:
+    - Overview: reactive/overview.md
+    - Resource Classes: reactive/resource-classes.md
+    - Task Classes: reactive/task-classes.md
+    - Handler Classes: reactive/handler-classes.md
+  - Communication and Memory:
+    - Ports and Channels: comm/ports-and-channels.md
+    - Memory Management: comm/memory.md
+  - The Application Module: wiring/application-module.md
+  - Project Structure and Build System: tooling/project-structure.md
+copyright: Copyright &copy; 2022 - 2026 The Termina Project Contributors
 
 theme: 
   name: material
