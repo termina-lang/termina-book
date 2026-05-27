@@ -130,6 +130,14 @@ container. Under this configuration, the transpiler, its language server, and
 the Termina syntax extension run within the image, while the source files remain
 on the host, where they can be managed as usual.
 
+The editor support is provided by the Termina extension, published on the Visual
+Studio Code Marketplace as
+[`termina-lang.termina`](https://marketplace.visualstudio.com/items?itemName=termina-lang.termina).
+It adds syntax highlighting for `.fin` files and connects to the transpiler's
+language server for diagnostics and code navigation. Listing it under
+`extensions` in the `.devcontainer/devcontainer.json` shown below installs it
+automatically when the project is opened in the container.
+
 This arrangement requires the
 [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 extension to be installed in Visual Studio Code. In the root of a project,
