@@ -7,14 +7,16 @@ is therefore the right component for the short, time-critical work that must be
 done the instant an event arrives, before control returns to the rest of the
 system. A handler class is the definition from which such an entity is built,
 and in its written form it resembles a task class closely; the difference lies
-in how and where its actions run.
+in how and where its action runs.
 
 ## Defining a handler class
 
 A handler class is introduced with the words `handler class`, its name, and a
-body that, like a task, holds the handler's ports, any fields it keeps, and the
-actions that respond to events. The class below reacts to an interrupt by
-incrementing a counter:
+body that, like a task, holds the handler's ports, any fields it keeps, and its
+action. A handler defines exactly one action, the one that runs when its
+triggering event arrives; this is the chief structural difference from a task,
+which may define several. The class below reacts to an interrupt by incrementing
+a counter:
 
 ```termina
 handler class CButtonHandler {

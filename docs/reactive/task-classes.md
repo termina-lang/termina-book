@@ -50,11 +50,25 @@ of port kinds is the subject of a later chapter.
 ## Actions
 
 An action is the unit of work a task performs in response to an event. It takes
-`&priv self`, which gives it read and write access to the task's own fields,
-followed by the value carried by the triggering event, and it returns a
-`Status<i32>` reporting whether it succeeded. An action runs to completion: once
-started, it performs its bounded sequence of steps and returns before the task
-handles another event.
+`&priv self`, or `&self` when it only reads the task's fields, followed by the
+value carried by the triggering event, and it returns a `Status<i32>` reporting
+whether it succeeded. An action runs to completion: once started, it performs its
+bounded sequence of steps and returns before the task handles another event.
+
+An action cannot be declared `&mut self`; the mutable self reference that a
+resource procedure takes is not permitted here. An action receives `&priv self`,
+the private self reference that the language reserves for the actions of tasks
+and handlers to reach their own fields. It grants read and write access to those
+fields: an action may consult them, assign to them directly, and pass an
+immutable reference to a field to another operation. What it cannot do is create
+a mutable reference to a private field; `&mut self->field` is rejected.
+
+This rule keeps a task or handler's state its own: because no mutable reference
+to a private field can escape the entity, that state is modified only by the
+entity's own actions, never through an alias held elsewhere. Data that other
+components must share or modify is placed in a resource instead, where access is
+mediated by an interface. The actions of handlers receive `&priv self` and follow
+the same rule.
 
 === "Termina"
     ```termina

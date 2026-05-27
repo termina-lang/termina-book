@@ -117,7 +117,7 @@ A method is a helper internal to the resource class. Unlike a procedure, it does
 not belong to any interface and cannot be called from outside through an access
 port; it exists only to be used by the procedures and other methods of the same
 class. A method that only reads the state takes `&self`, while one that also
-modifies it takes `&priv self`. The `at_limit` method reads `count` and reports
+modifies it takes `&mut self`. The `at_limit` method reads `count` and reports
 whether the counter has reached its ceiling:
 
 === "Termina"
