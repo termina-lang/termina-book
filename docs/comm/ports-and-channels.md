@@ -93,8 +93,7 @@ port:
 
         CProducer * self = (CProducer *)__this;
 
-        __status_int32_t status;
-        status.__variant = Success;
+        __status_int32_t status = { .__variant = Success };
         {
             const uint32_t msg = 42U;
             __termina_out_port__send(__ev, self->out_port, (void *)&msg);
@@ -135,8 +134,7 @@ and a `triggers` clause:
 
         CConsumer * self = (CConsumer *)__this;
 
-        __status_int32_t status;
-        status.__variant = Success;
+        __status_int32_t status = { .__variant = Success };
 
         self->total = self->total + msg;
 

@@ -36,10 +36,11 @@ contributed to the early design of the language. The language is currently
 being matured for on-board space software in an activity of the European Space
 Agency's Open Space Innovation Platform, in collaboration with GMV.
 
-The language is young. Its version numbers begin with a zero, and a minor
-release may still change constructs in incompatible ways. This book documents
-the language as it exists today and is revised with each release; where a
-feature is planned but not yet available, the book says so explicitly.
+Termina is a young language whose version numbers still begin with a zero,
+and a minor release may change constructs in incompatible ways. This book
+documents the language as it exists today and is revised with each release;
+where a feature is planned but not yet available, the book says so
+explicitly.
 
 ## How to read this book
 
@@ -55,7 +56,6 @@ Readers who prefer to start from the foundations may instead jump from the
 installation chapter directly to Language Basics and return to the tutorial
 once the reactive model has been covered.
 
-All the code shown in this book is real. Every Termina fragment has been
-compiled with the version of the transpiler current at the time of writing,
-and every C fragment shown alongside is the transpiler's actual output, not a
-paraphrase of it.
+Every Termina fragment in this book has been compiled with the version of
+the transpiler current at the time of writing, and every C fragment shown
+alongside is the transpiler's actual output rather than a paraphrase of it.

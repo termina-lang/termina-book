@@ -56,11 +56,9 @@ is empty otherwise. The caller must therefore handle both cases:
 
         CCollector * self = (CCollector *)__this;
 
-        __status_int32_t status;
-        status.__variant = Success;
+        __status_int32_t status = { .__variant = Success };
 
-        __option_box_t opt;
-        opt.__variant = None;
+        __option_box_t opt = { .__variant = None };
 
         self->pool_port.alloc(__ev, self->pool_port.__that, &opt);
 
@@ -117,8 +115,7 @@ returning it to the pool with `free`:
 
         CSink * self = (CSink *)__this;
 
-        __status_int32_t status;
-        status.__variant = Success;
+        __status_int32_t status = { .__variant = Success };
 
         self->pool_port.free(__ev, self->pool_port.__that, sample);
 
@@ -172,8 +169,7 @@ and writes it with `load` and `store`:
 
         CMonitor * self = (CMonitor *)__this;
 
-        __status_int32_t status;
-        status.__variant = Success;
+        __status_int32_t status = { .__variant = Success };
 
         uint32_t v = 0U;
 

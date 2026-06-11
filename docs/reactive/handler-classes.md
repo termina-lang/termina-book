@@ -62,8 +62,7 @@ action itself:
 
         CButtonHandler * self = (CButtonHandler *)__this;
 
-        __status_int32_t status;
-        status.__variant = Success;
+        __status_int32_t status = { .__variant = Success };
 
         self->counter_port.increment(__ev, self->counter_port.__that);
 

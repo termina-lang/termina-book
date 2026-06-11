@@ -86,8 +86,7 @@ the same rule.
 
         CSamplerTask * self = (CSamplerTask *)__this;
 
-        __status_int32_t status;
-        status.__variant = Success;
+        __status_int32_t status = { .__variant = Success };
 
         self->counter_port.increment(__ev, self->counter_port.__that);
 
@@ -114,6 +113,62 @@ reports a failure, the loop raises the corresponding runtime exception rather
 than ignoring the result. The internal fields the thread relies on, such as the
 identifier of its message queue, appear in the generated structure alongside the
 task's own ports.
+
+## Chaining actions with `continue`
+
+An action may end by transferring control to another action of the same task,
+with the `continue` statement. The statement names the action to run and
+supplies its arguments, and it must be the final statement of whatever
+execution path it appears on; the transpiler rejects a `continue` that is
+followed by further statements. The result of the named action becomes the
+result of the activation.
+
+Chaining is a way to keep individual actions short and single-purpose when a
+response naturally decomposes into stages, each stage written as a separate
+action with a name of its own. The following task performs its periodic work
+in `first_step` and escalates to `second_step` when a threshold is crossed:
+
+=== "Termina"
+    ```termina
+    action first_step(&priv self, _t : TimeVal) -> Status<i32> {
+        let ret : Status<i32> = Success;
+        self->counter = self->counter + 2;
+        if self->counter > 10 {
+            continue self->second_step();
+        } else {
+            return ret;
+        }
+    }
+    ```
+=== "C"
+    ```c
+    __status_int32_t CChainTask__first_step(const __termina_event_t * const __ev,
+                                            void * const __this, TimeVal _t) {
+
+        CChainTask * self = (CChainTask *)__this;
+
+        __status_int32_t ret = { .__variant = Success };
+
+        self->counter = self->counter + 2U;
+
+        if (self->counter > 10U) {
+
+            return CChainTask__second_step(__ev, self);
+
+        } else {
+
+            return ret;
+
+        }
+
+    }
+    ```
+
+As the generated code shows, the chained action is invoked as a tail call
+within the same activation: `first_step` does not return to the task's event
+loop and then resume; control passes directly to `second_step`, which produces
+the activation's result. Despite the keyword it shares with C's loop-control
+statement, `continue` has nothing to do with loops.
 
 ## Instantiation
 

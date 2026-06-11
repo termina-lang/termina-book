@@ -153,15 +153,117 @@ typedef struct {
 } CCounter;
 ```
 
+## Providing several interfaces
+
+A resource class may implement more than one interface, listing them after
+`provides` separated by commas. Each interface then offers a different view of
+the same resource, and a component is granted exactly the view its access port
+names. Consider a counter that ordinary clients may only increment and read,
+while a supervisory component may also reset it:
+
+```termina
+interface ICounterCtl {
+    procedure reset(&mut self);
+};
+
+resource class CCounter provides ICounter, ICounterCtl {
+
+    count : u32;
+
+    // ... procedures of ICounter ...
+
+    procedure reset(&mut self) {
+        self->count = 0;
+        return;
+    }
+
+};
+```
+
+A task holding a port of type `access ICounter` can call `increment` and `get`
+but not `reset`; the supervisory component reaches `reset` through a port of
+type `access ICounterCtl`. Both ports may be wired to the same instance. The
+class must implement every procedure of every interface it provides, and the
+transpiler verifies that no procedure is missing.
+
+## Resources that use other resources
+
+A resource class may itself declare access ports, which lets one resource be
+built on top of others. A watchdog, for example, can encapsulate the policy of
+resetting a counter when a deadline has been missed, reaching the counter
+through the `ICounterCtl` interface introduced above:
+
+=== "Termina"
+    ```termina
+    interface IWatchdog {
+        procedure kick(&mut self);
+    };
+
+    resource class CWatchdog provides IWatchdog {
+
+        counter_port : access ICounterCtl;
+
+        expired : bool;
+
+        procedure kick(&mut self) {
+            if self->expired {
+                self->counter_port.reset();
+                self->expired = false;
+            }
+            return;
+        }
+
+    };
+    ```
+=== "C"
+    ```c
+    void CWatchdog__kick(const __termina_event_t * const __ev,
+                         void * const __this) {
+
+        CWatchdog * self = (CWatchdog *)__this;
+
+        __termina_lock_t __lock = __termina_resource__lock(&__ev->owner,
+                                                           &self->__lock_type);
+
+        if (self->expired) {
+
+            self->counter_port.reset(__ev, self->counter_port.__that);
+
+            self->expired = 0;
+
+        }
+
+        __termina_resource__unlock(&__ev->owner, &self->__lock_type, __lock);
+
+        return;
+
+    }
+    ```
+
+When a task calls `kick`, the watchdog's procedure runs under the watchdog's
+own protection and, within it, the call through `counter_port` enters the
+counter's procedure under the counter's protection in turn. The transpiler
+analyzes these chains of access when it assigns each resource its protection
+mechanism. Cyclic dependencies between resources cannot arise: a connection in
+the application module may only name an instance declared earlier in it, so
+the uses-relation between resources always forms a directed acyclic graph, and
+the nesting of resource calls cannot deadlock.
+
 ## Instantiation
 
 A resource class is a definition; the resource itself comes into being when an
 instance is declared in the application module. The declaration names the
-instance, gives its class, and supplies an initial value for every field:
+instance, gives its class, supplies an initial value for every field, and
+wires any access ports the class declares:
 
 ```termina
 resource counter : CCounter = {
     count = 0
+};
+
+resource watchdog : CWatchdog = {
+    expired = false,
+    counter_port <-> counter
 };
 ```
 
