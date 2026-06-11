@@ -12,7 +12,7 @@
   --t-panel:     #102541;   /* code block surface */
   --t-sky:       #87C7F2;
   --t-sky-deep:  #2C6FA6;   /* links / active — readable on white */
-  --t-amber:     #C9772B;
+  --t-amber:     #A35D17;
   --t-ink:       #15243A;
   --t-muted:     #5A6B7E;
   --t-hair:      #E3EAF1;
@@ -27,7 +27,18 @@
 
   --md-text-font:  "IBM Plex Sans";
   --md-code-font:  "JetBrains Mono";
+
+  /* ---- Mermaid diagrams in brand colors ---- */
+  --md-mermaid-font-family:    "IBM Plex Sans", system-ui, sans-serif;
+  --md-mermaid-node-bg-color:  #EEF6FD;
+  --md-mermaid-node-fg-color:  var(--t-ink);
+  --md-mermaid-edge-color:     var(--t-sky-deep);
+  --md-mermaid-label-bg-color: transparent;
+  --md-mermaid-label-fg-color: var(--t-ink);
 }
+
+/* Mermaid: center diagrams and keep them off the hairline borders */
+.md-typeset .mermaid { text-align: center; margin: 1.6em 0; }
 
 /* Headings in the display face */
 .md-typeset h1, .md-typeset h2, .md-typeset h3,
@@ -36,8 +47,11 @@
   font-weight: 600;
   letter-spacing: -0.02em;
 }
-.md-typeset h1 { color: var(--t-ink); font-size: 2.1rem; }
-.md-typeset h2 { margin-top: 2.4em; font-size: 1.5rem; }
+.md-typeset h1 { color: var(--t-ink); font-size: 2.1rem; margin-bottom: .8em; }
+.md-typeset h2 { margin-top: 2.2em; margin-bottom: .55em; font-size: 1.5rem; }
+.md-typeset h3 { margin-top: 1.6em; margin-bottom: .5em; }
+.md-typeset h4 { margin-bottom: .45em; }
+.md-typeset h2 + p, .md-typeset h3 + p, .md-typeset h4 + p { margin-top: .35em; }
 
 /* Body */
 body, .md-typeset { font-family: "IBM Plex Sans", system-ui, sans-serif; }
@@ -60,6 +74,24 @@ body, .md-typeset { font-family: "IBM Plex Sans", system-ui, sans-serif; }
 
 /* ---- TOC (right) active ---- */
 .md-nav--secondary .md-nav__link--active { color: var(--t-sky-deep); }
+
+/* ---- Content tabs (=== "Termina" / === "C") ---- */
+.md-typeset .tabbed-labels > label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: .6rem; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--t-muted);
+}
+.md-typeset .tabbed-labels > label:hover { color: var(--t-sky-deep); }
+.md-typeset .tabbed-set { margin-top: .9em; }
+.md-typeset .tabbed-content { padding-top: .2em; }
+
+/* Slimmer permalink anchors */
+.md-typeset .headerlink { color: var(--t-hair); transition: color .15s; }
+.md-typeset .headerlink:hover, .md-typeset :target > .headerlink { color: var(--t-sky-deep); }
+
+/* Footer prev/next in brand */
+.md-footer__link:hover .md-footer__title { color: var(--t-sky); }
 
 /* =============================================================
    Code blocks — navy panel + Termina syntax palette
@@ -95,12 +127,30 @@ body, .md-typeset { font-family: "IBM Plex Sans", system-ui, sans-serif; }
 .md-typeset .highlight .s,  .md-typeset .highlight .s1,
 .md-typeset .highlight .s2, .md-typeset .highlight .sb { color: #7FC78C; }        /* string */
 .md-typeset .highlight .c,  .md-typeset .highlight .c1,
-.md-typeset .highlight .cm, .md-typeset .highlight .cs { color: #6E86A0; font-style: italic; }  /* comment */
+.md-typeset .highlight .cm, .md-typeset .highlight .cs { color: #8299B4; font-style: italic; }  /* comment */
 .md-typeset .highlight .nd { color: #B6A0E2; }                                    /* decorator/attribute */
-.md-typeset .highlight .o,  .md-typeset .highlight .p  { color: #AFC4DA; }        /* operator/punct */
-.md-typeset .highlight .n  { color: #D7E4F1; }                                    /* name */
+.md-typeset .highlight .o,  .md-typeset .highlight .p,
+.md-typeset .highlight .ow { color: #AFC4DA; }                                    /* operator/punct */
+.md-typeset .highlight .n,  .md-typeset .highlight .nx,
+.md-typeset .highlight .ne, .md-typeset .highlight .err { color: #D7E4F1; }       /* name / fallback */
+.md-typeset .highlight .nv, .md-typeset .highlight .vc,
+.md-typeset .highlight .vg, .md-typeset .highlight .vi,
+.md-typeset .highlight .vm { color: #BBDDF7; }                                    /* variables ($PWD) */
+.md-typeset .highlight .si, .md-typeset .highlight .se,
+.md-typeset .highlight .sa, .md-typeset .highlight .sr,
+.md-typeset .highlight .ss, .md-typeset .highlight .sx,
+.md-typeset .highlight .sc, .md-typeset .highlight .dl { color: #E8B270; }        /* escapes/interpol */
+.md-typeset .highlight .sd, .md-typeset .highlight .sh { color: #7FC78C; }        /* doc/heredoc strings */
+.md-typeset .highlight .m,  .md-typeset .highlight .mo,
+.md-typeset .highlight .mb { color: #F2A33C; }                                    /* other numbers */
+.md-typeset .highlight .kc, .md-typeset .highlight .kp,
+.md-typeset .highlight .kv { color: #74AEEA; }                                    /* keyword constants */
+.md-typeset .highlight .cp, .md-typeset .highlight .cpf { color: #B6A0E2; }       /* preprocessor */
+.md-typeset .highlight .no { color: #F2A33C; }                                    /* constants */
+.md-typeset .highlight .gp { color: #7C97B5; }                                    /* shell prompt */
+.md-typeset .highlight .w  { color: inherit; }                                    /* whitespace */
 /* line numbers */
-.md-typeset .highlight .linenos, .md-typeset .highlight .lineno { color: #3D526A; }
+.md-typeset .highlight .linenos, .md-typeset .highlight .lineno { color: #7C97B5; }
 
 /* code title bar (when using ```lang title="file.termina") */
 .md-typeset .highlight > span[class^="filename"],
@@ -127,12 +177,12 @@ body, .md-typeset { font-family: "IBM Plex Sans", system-ui, sans-serif; }
 .md-typeset .admonition.warning, .md-typeset .admonition.important {
   border-color: #EDD3AC; border-left-color: var(--t-amber); background: #FBF2E6;
 }
-.md-typeset .warning > .admonition-title, .md-typeset .important > .admonition-title { background: rgba(201,119,43,.12); color: var(--t-amber); }
+.md-typeset .warning > .admonition-title, .md-typeset .important > .admonition-title { background: rgba(163,93,23,.12); color: var(--t-amber); }
 
 .md-typeset .admonition.tip, .md-typeset .admonition.success {
-  border-color: #BEE3CD; border-left-color: #2F8F5B; background: #EBF7F0;
+  border-color: #BEE3CD; border-left-color: #1F7A48; background: #EBF7F0;
 }
-.md-typeset .tip > .admonition-title, .md-typeset .success > .admonition-title { background: rgba(47,143,91,.12); color: #2F8F5B; }
+.md-typeset .tip > .admonition-title, .md-typeset .success > .admonition-title { background: rgba(31,122,72,.12); color: #1F7A48; }
 
 /* =============================================================
    Tables

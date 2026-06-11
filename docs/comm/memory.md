@@ -97,6 +97,25 @@ block neither released nor passed on, or that would use a block after it has
 already been given away. This discipline is what guarantees, at compile time,
 that the memory managed by a pool is never leaked and never used after it has been freed.
 
+The life of a block is summarized by the following diagram: it leaves the
+pool through `alloc`, is owned by exactly one component at a time, may change
+hands through a channel, and returns to the pool through `free`.
+
+```mermaid
+%%{init: {"theme": "base", "themeVariables": {"fontFamily": "IBM Plex Sans, sans-serif", "fontSize": "15px", "primaryColor": "#EEF6FD", "primaryBorderColor": "#2C6FA6", "primaryTextColor": "#15243A", "lineColor": "#2C6FA6", "edgeLabelBackground": "#FFFFFF"}, "flowchart": {"curve": "linear", "nodeSpacing": 55, "rankSpacing": 65, "padding": 10}}}%%
+flowchart LR
+    pool[("Pool")] -- "alloc &rarr; Some(box)" --> owner["owned by the<br>allocating entity"]
+    owner -- "send (transfer)" --> recv["owned by the<br>receiving entity"]
+    owner -- "free" --> pool
+    recv -- "free" --> pool
+    classDef emitter fill:#0B2140,stroke:#0B2140,color:#E9F2FB
+    classDef entity fill:#EEF6FD,stroke:#2C6FA6,stroke-width:1.5px,color:#15243A
+    classDef channel fill:#FBF2E6,stroke:#A35D17,stroke-width:1.5px,color:#15243A
+    classDef store fill:#E4F2F0,stroke:#0E8077,stroke-width:1.5px,color:#15243A
+    class pool store
+    class owner,recv entity
+```
+
 A block is consumed in one of two ways. The first is to release it explicitly,
 returning it to the pool with `free`:
 

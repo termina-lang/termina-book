@@ -12,12 +12,23 @@ supported.
 
 From source to hardware, a deployed application has four layers:
 
-| Layer | Contents |
-|:------|:---------|
-| Application | The C code generated from the Termina program |
-| OSAL | The abstraction layer: tasks, queues, timers, locks, system services |
-| Operating system | RTEMS, FreeRTOS, or the host's POSIX environment |
-| Hardware | The target processor and its devices |
+```mermaid
+%%{init: {"theme": "base", "themeVariables": {"fontFamily": "IBM Plex Sans, sans-serif", "fontSize": "15px", "primaryColor": "#EEF6FD", "primaryBorderColor": "#2C6FA6", "primaryTextColor": "#15243A", "lineColor": "#2C6FA6", "edgeLabelBackground": "#FFFFFF"}, "flowchart": {"curve": "linear", "nodeSpacing": 55, "rankSpacing": 65, "padding": 10}}}%%
+flowchart TB
+    app["<b>Application</b><br><small>C code generated from the Termina program</small>"]
+    osal["<b>OSAL</b><br><small>tasks &middot; queues &middot; timers &middot; locks &middot; system services</small>"]
+    os["<b>Operating system</b><br><small>RTEMS &middot; FreeRTOS &middot; host POSIX</small>"]
+    hw["<b>Hardware</b><br><small>target processor and devices</small>"]
+    app --> osal --> os --> hw
+    classDef emitter fill:#0B2140,stroke:#0B2140,color:#E9F2FB
+    classDef entity fill:#EEF6FD,stroke:#2C6FA6,stroke-width:1.5px,color:#15243A
+    classDef channel fill:#FBF2E6,stroke:#A35D17,stroke-width:1.5px,color:#15243A
+    classDef store fill:#E4F2F0,stroke:#0E8077,stroke-width:1.5px,color:#15243A
+    class app entity
+    class osal channel
+    class os store
+    class hw emitter
+```
 
 The generated code is the same for every platform; only the layers beneath it
 change. All the primitives that the reactive model relies on reach the
