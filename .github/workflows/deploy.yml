@@ -1,0 +1,27 @@
+name: Deploy the book
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install MkDocs and the Termina lexer
+        run: |
+          pip install mkdocs-material
+          pip install git+https://github.com/termina-lang/termina-lexer.git
+
+      - name: Build and publish to gh-pages
+        run: mkdocs gh-deploy --force
