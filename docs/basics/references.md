@@ -1,8 +1,8 @@
 # References
 
-A reference is a temporary, non-owning handle to a value that already exists
-elsewhere. It allows a function to read a value without copying it, or to modify
-a value belonging to its caller, as seen in the chapter on functions. References
+A reference is a temporary, non-owning handle to an object that already exists
+elsewhere. It allows a function to read an object without copying it, or to
+modify an object belonging to its caller, as seen in the chapter on functions. References
 have appeared in passing in earlier examples; this chapter sets out the rules
 that govern them. Those rules are unusually strict: by confining references to a
 single role, Termina keeps the checking of memory safety simple enough to be
@@ -12,9 +12,9 @@ require.
 ## The two kinds of reference
 
 A reference is either immutable or mutable. An immutable reference, written
-`&T`, grants read-only access to a value of type `T`. A mutable reference,
-written `&mut T`, additionally allows the referenced value to be modified. A
-reference is created by applying `&` or `&mut` to a value, and the value it
+`&T`, grants read-only access to an object of type `T`. A mutable reference,
+written `&mut T`, additionally allows the referenced object to be modified. A
+reference is created by applying `&` or `&mut` to an object, and the object it
 refers to is reached through the dereference operator `*`:
 
 ```termina

@@ -56,10 +56,10 @@ By default, a parameter is passed by value: the function receives a copy of the
 argument, and any change it makes to that copy is invisible to the caller. The
 `x` parameter of `add_one` is passed this way.
 
-When a function needs to read a large value without copying it, or to modify a
-value on the caller's behalf, the parameter is declared as a reference.
+When a function needs to read a large object without copying it, or to modify
+an object on the caller's behalf, the parameter is declared as a reference.
 An immutable reference, written `&T`, grants read-only access, while a mutable
-reference, written `&mut T`, allows the referenced value to be modified. The
+reference, written `&mut T`, allows the referenced object to be modified. The
 `bump` function above takes a `&mut u32` and updates the integer through it,
 using the dereference operator `*` to reach the value. As the generated code
 shows, `&mut u32` becomes a C pointer, and the dereference becomes a pointer

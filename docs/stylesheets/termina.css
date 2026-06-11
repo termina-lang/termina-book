@@ -48,10 +48,13 @@
   letter-spacing: -0.02em;
 }
 .md-typeset h1 { color: var(--t-ink); font-size: 2.1rem; margin-bottom: .8em; }
-.md-typeset h2 { margin-top: 2.2em; margin-bottom: .55em; font-size: 1.5rem; }
-.md-typeset h3 { margin-top: 1.6em; margin-bottom: .5em; }
-.md-typeset h4 { margin-bottom: .45em; }
+.md-typeset h2 { margin-top: 1.5em; margin-bottom: .55em; font-size: 1.5rem; }
+.md-typeset h3 { margin-top: 1.2em; margin-bottom: .5em; }
+.md-typeset h4 { margin-top: 1em; margin-bottom: .45em; }
 .md-typeset h2 + p, .md-typeset h3 + p, .md-typeset h4 + p { margin-top: .35em; }
+
+/* Breathing room at the end of every page */
+.md-content__inner { padding-bottom: 5rem; }
 
 /* Body */
 body, .md-typeset { font-family: "IBM Plex Sans", system-ui, sans-serif; }
@@ -190,6 +193,10 @@ body, .md-typeset { font-family: "IBM Plex Sans", system-ui, sans-serif; }
 .md-typeset table:not([class]) {
   border: 1px solid var(--t-hair); border-radius: 12px; overflow: hidden; font-size: .74rem;
 }
+/* center tables on the page (plain markup and the JS scroll wrapper alike) */
+.md-typeset table:not([class]) { display: table; margin-left: auto; margin-right: auto; }
+.md-typeset .md-typeset__scrollwrap { text-align: center; }
+.md-typeset .md-typeset__table { display: inline-block; text-align: initial; }
 .md-typeset table:not([class]) th {
   background: var(--t-paper-2); color: var(--t-navy);
   font-family: "JetBrains Mono", monospace; font-size: .64rem;
