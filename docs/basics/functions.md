@@ -104,7 +104,7 @@ an underscore to mark the omission as deliberate, and the transpiler then
 accepts it. This is the convention behind names such as `_current_time` seen in
 earlier examples.
 
-## Array parameters and dependent sizes
+## Array parameters
 
 An array cannot be passed to a function by value: an array is not a valid
 parameter type on its own. A function that operates on an array instead receives
@@ -113,16 +113,17 @@ the array must be modified, and the array's size travels with the reference as
 part of its type. A function cannot return an array either; an array result is
 produced by writing into one passed by mutable reference.
 
-To allow a single function to operate on arrays of different sizes, a parameter
-may be declared `const usize` and then used as the
-size of an array parameter that follows it. The `const` qualifier marks the
-value as a compile-time size dependency, known when the call is translated:
+The size in the parameter type is a compile-time constant, usually given a name
+with `constexpr` so that the function and its callers share a single
+definition:
 
 === "Termina"
     ```termina
-    function sum_bytes(n : const usize, data : &[u8; n]) -> u32 {
+    constexpr FRAME_LEN : usize = 16;
+
+    function sum_bytes(data : &[u8; FRAME_LEN]) -> u32 {
         var acc : u32 = 0;
-        for i : usize in 0 .. n {
+        for i : usize in 0 .. FRAME_LEN {
             acc = acc + (data[i] as u32);
         }
         return acc;
@@ -130,13 +131,13 @@ value as a compile-time size dependency, known when the call is translated:
     ```
 === "C"
     ```c
-    uint32_t sum_bytes(const size_t n, const uint8_t data[n]) {
+    uint32_t sum_bytes(const uint8_t data[16U]) {
 
         uint32_t acc = 0U;
 
-        for (size_t i = 0U; i < n; i = i + 1U) {
+        for (size_t i = 0U; i < 16U; i = i + 1U) {
 
-            acc = acc + (uint32_t)data[__termina_array__index(n, i)];
+            acc = acc + (uint32_t)data[__termina_array__index(16U, i)];
 
         }
 
@@ -145,10 +146,12 @@ value as a compile-time size dependency, known when the call is translated:
     }
     ```
 
-Because `n` is a compile-time size dependency, it is a valid upper bound for the
-`for` loop that walks the array, even though its concrete value varies from one
-call to another. This is how a function processes a buffer of caller-determined
-length while every loop within it remains statically bounded.
+Because the size is part of the parameter type, the transpiler rejects a call
+that supplies an array of any other length, and the same constant serves as
+the bound of the loop that walks the array. When only a leading portion of a
+larger buffer holds meaningful data, the caller passes a slice of the expected
+size, as described in the chapter on references, and the position up to which
+the data is valid travels in a separate parameter.
 
 ## Access to state
 

@@ -62,12 +62,12 @@ deployed when `enable-system-port` is set in `termina.yaml`. It is reached
 through a port declared `access SystemAPI` and wired with
 `<-> system_entry`. Its procedures:
 
-| Group | Procedures |
-|:------|:-----------|
-| Time | `clock_get_uptime(&mut TimeVal)`, `delay_in(&TimeVal)` |
-| Output | `print(n, &[char; n])`, `println(n, &[char; n])`, `print_char(char)` |
-| Output (numeric) | `print_<T>(value, base)` and `println_<T>(value, base)` for every integer type, plus `print_f32/f64` and `println_f32/f64` |
-| Input | `read(n, &mut [char; n], &mut usize)` |
+| Group | Procedures | Typical call |
+|:------|:-----------|:-------------|
+| Time | `clock_get_uptime`, `delay_in` | `clock_get_uptime(&mut now)` |
+| Output | `print`, `println`, `print_char` | `println(12, &msg)` |
+| Output (numeric) | `print_<T>` and `println_<T>` for every integer type, plus `print_f32/f64` and `println_f32/f64` | `println_u32(value, base)` |
+| Input | `read` | `read(256, &mut buf, &mut nread)` |
 
 ## Prelude functions
 

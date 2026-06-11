@@ -30,7 +30,7 @@ as identifiers. They are listed here by the role they play.
 |:--------|:-----|
 | `box` | Owned block allocated from a pool |
 | `loc` | Located (memory-mapped) field |
-| `const` | Constant declaration; compile-time size parameter qualifier |
+| `const` | Constant declaration |
 | `constexpr` | Compile-time constant expression |
 
 ## Components and ports

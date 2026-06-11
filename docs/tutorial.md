@@ -488,9 +488,11 @@ The implementation of the telemetry resource will be done in a new module named 
     ```termina
     import common.types;
 
+    constexpr hk_data_size : usize = 10;
+
     interface ITMChannel {
 
-        procedure send_tm_3_25(&mut self, hk_data_size : const usize, hk_data : &[u32; hk_data_size]);
+        procedure send_tm_3_25(&mut self, hk_data : &[u32; hk_data_size]);
         procedure send_tm_1_1(&mut self);
         procedure send_tm_1_2(&mut self, value : u32);
 
@@ -500,7 +502,7 @@ The implementation of the telemetry resource will be done in a new module named 
 
         system_port : access SystemAPI;
 
-        procedure send_tm_3_25(&mut self, hk_data_size : const usize, hk_data : &[u32; hk_data_size]) {
+        procedure send_tm_3_25(&mut self, hk_data : &[u32; hk_data_size]) {
 
             // Handle TM_2_25 telemetry
             let msg : [char; 15] = "Send TM(3,25): ";
@@ -586,8 +588,8 @@ The implementation of the telemetry resource will be done in a new module named 
     }
 
     void CTMChannel__send_tm_3_25(const __termina_event_t * const __ev,
-                                  void * const __this, const size_t hk_data_size,
-                                  const uint32_t hk_data[hk_data_size]) {
+                                  void * const __this,
+                                  const uint32_t hk_data[10U]) {
 
         CTMChannel * self = (CTMChannel *)__this;
 
@@ -602,17 +604,17 @@ The implementation of the telemetry resource will be done in a new module named 
 
         self->system_port.print(__ev, 15U, msg);
 
-        for (size_t i = 0U; i < hk_data_size - 1U; i = i + 1U) {
+        for (size_t i = 0U; i < 9U; i = i + 1U) {
 
-            self->system_port.print_u32(__ev,
-                                        hk_data[__termina_array__index(hk_data_size,
-                                                                       i)], base);
+            self->system_port.print_u32(__ev, hk_data[__termina_array__index(10U,
+                                                                             i)],
+                                        base);
 
             self->system_port.print(__ev, 2U, comma);
 
         }
 
-        self->system_port.println_u32(__ev, hk_data[hk_data_size - 1U], base);
+        self->system_port.println_u32(__ev, hk_data[10U - 1U], base);
 
         __termina_resource__unlock(&__ev->owner, &self->__lock_type, __lock);
 
@@ -643,13 +645,13 @@ The implementation of the telemetry resource will be done in a new module named 
                                  void * const __this, uint32_t value);
 
     void CTMChannel__send_tm_3_25(const __termina_event_t * const __ev,
-                                  void * const __this, const size_t hk_data_size,
-                                  const uint32_t hk_data[hk_data_size]);
+                                  void * const __this,
+                                  const uint32_t hk_data[10U]);
     ```
 
 The module defines the interface `ITMChannel`, which specifies three procedures corresponding to the different telemetry messages that the system can send:
 
-- `send_tm_3_25()`: simulates the transmission of housekeeping telemetry packets. It receives two arguments: the size of the housekeeping dataset and a reference to the array that stores the parameter values. In this case, the parameter `hk_data_size` is declared as a constant parameter (`const usize`), meaning that its value must be known at compile time. Termina allows developers to use this type of argument to, among other uses, parameterize the size of arrays used as input parameters.
+- `send_tm_3_25()`: simulates the transmission of housekeeping telemetry packets. It receives a reference to the array that stores the parameter values. The size of the array is fixed by the constant expression `hk_data_size`, declared at the top of the module, so the interface states exactly how many parameters a housekeeping report carries.
 - `send_tm_1_1()`: represents a telecommand acceptance report, sent when a received telecommand is successfully validated.
 - `send_tm_1_2()`: represents a telecommand rejection report, which includes an error code provided as a 32-bit unsigned integer argument.
 
@@ -781,7 +783,7 @@ The implementation of the resource will be done in a new module called `src/reso
                     }
                 }            
 
-                self->tm_channel_port.send_tm_3_25(SENSOR_ARRAY_SIZE, &hk_data);
+                self->tm_channel_port.send_tm_3_25(&hk_data);
 
             }
 
@@ -837,7 +839,7 @@ The implementation of the resource will be done in a new module called `src/reso
             }
 
             self->tm_channel_port.send_tm_3_25(__ev, self->tm_channel_port.__that,
-                                               10U, hk_data);
+                                               hk_data);
 
         }
 
@@ -891,7 +893,7 @@ The implementation of the resource will be done in a new module called `src/reso
         struct {
             void * __that;
             void (* send_tm_3_25)(const __termina_event_t * const, void * const,
-                                  const size_t, const uint32_t *);
+                                  const uint32_t *);
         } tm_channel_port;
         struct {
             void * __that;
