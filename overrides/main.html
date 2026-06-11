@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+<!--
+  overrides/main.html — small brand touches on top of Material.
+  Adds the monospace "termina" wordmark next to the shield logo
+  in the header. Extend here for banners, version pickers, etc.
+-->
+
+{% block site_nav %}
+  {{ super() }}
+{% endblock %}
+
+{% block extrahead %}
+  <style>
+    /* wordmark next to the logo in the header */
+    .md-header__button.md-logo + .md-header__title .md-header__topic:first-child .md-ellipsis {
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      letter-spacing: .01em;
+    }
+  </style>
+{% endblock %}

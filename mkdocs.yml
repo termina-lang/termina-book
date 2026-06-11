@@ -1,12 +1,17 @@
 site_name: The Termina Book
+site_description: A programming language for real-time critical systems
+site_url: https://termina-lang.github.io/termina-book/
+repo_url: https://github.com/termina-lang/termina
+repo_name: termina-lang/termina
+copyright: Copyright &copy; 2022 - 2026 The Termina Project Contributors
 
 nav:
   - Home: index.md
   - Foreword: foreword.md
-  - Getting started:
+  - Getting Started:
     - Installation: started/install.md
     - Hello, Real-Time World!: started/hello-world.md
-  - Building our first application: tutorial.md
+  - Building Our First Application: tutorial.md
   - Language Basics:
     - Types and Constants: basics/types.md
     - Variables and Mutability: basics/variables.md
@@ -23,17 +28,47 @@ nav:
     - Ports and Channels: comm/ports-and-channels.md
     - Memory Management: comm/memory.md
   - The Application Module: wiring/application-module.md
-  - Project Structure and Build System: tooling/project-structure.md
-copyright: Copyright &copy; 2022 - 2026 The Termina Project Contributors
+  - Memory-Mapped I/O: advanced/memory-mapped-io.md
+  - Platforms and the OSAL: platforms/osal.md
+  - Tooling:
+    - Project Structure and Build System: tooling/project-structure.md
+    - Debugging: tooling/debugging.md
+  - Appendix:
+    - A. Keywords: appendix/keywords.md
+    - B. Operators and Symbols: appendix/operators.md
+    - C. Built-in Types and Classes: appendix/builtins.md
+    - D. Naming Conventions: appendix/conventions.md
 
-theme: 
+theme:
   name: material
+  custom_dir: overrides
   logo: assets/logo_termina.png
+  favicon: assets/logo_termina.png
+  font:
+    text: IBM Plex Sans
+    code: JetBrains Mono
+  palette:
+    - scheme: default
+      primary: custom
+      accent: custom
   features:
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - navigation.indexes
+    - toc.follow
     - content.code.copy
+    - search.suggest
+
+extra_css:
+  - stylesheets/termina.css
 
 markdown_extensions:
   - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - pymdownx.details
   - pymdownx.highlight:
       use_pygments: true
       anchor_linenums: true
@@ -42,3 +77,5 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
+  - toc:
+      permalink: true

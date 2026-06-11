@@ -8,9 +8,10 @@ to its counterpart in the generated C code.
 
 ## Arithmetic operators
 
-The five arithmetic operators (`+`, `-`, `*`, `/`, and `%`) act on integer
-operands and produce an integer result. The remainder operator `%` yields the
-remainder of the integer division of its operands.
+The five arithmetic operators are `+`, `-`, `*`, `/`, and `%`. The first four
+act on operands of any numeric type, integer or floating-point, and produce a
+result of that same type. The remainder operator `%` yields the remainder of
+the integer division of its operands and is defined for integers only.
 
 ```termina
 let sum : u32 = a + b;
@@ -35,7 +36,9 @@ as described under casting below.
 
 The comparison operators relate two operands of the same type and produce a
 `bool`. They are `==` and `!=` for equality and inequality, and `<`, `<=`, `>`,
-and `>=` for ordering.
+and `>=` for ordering. The ordering operators accept both integer and
+floating-point operands; the equality operators are not defined for
+floating-point types, for the reasons given in the chapter on types.
 
 ```termina
 let in_range : bool = index < limit;

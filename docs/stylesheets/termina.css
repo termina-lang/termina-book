@@ -1,0 +1,161 @@
+/* =============================================================
+   Termina — brand theme for Material for MkDocs
+   Drop-in: docs/stylesheets/termina.css  (see mkdocs.yml → extra_css)
+   Tunes Material's tokens to the Termina design system.
+   ============================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ---- brand palette ---- */
+  --t-navy:      #0B2140;
+  --t-navy-deep: #06182F;
+  --t-panel:     #102541;   /* code block surface */
+  --t-sky:       #87C7F2;
+  --t-sky-deep:  #2C6FA6;   /* links / active — readable on white */
+  --t-amber:     #C9772B;
+  --t-ink:       #15243A;
+  --t-muted:     #5A6B7E;
+  --t-hair:      #E3EAF1;
+  --t-paper-2:   #F4F8FB;
+
+  /* ---- map onto Material tokens ---- */
+  --md-primary-fg-color:        var(--t-navy);
+  --md-primary-fg-color--light: #16314F;
+  --md-primary-fg-color--dark:  var(--t-navy-deep);
+  --md-accent-fg-color:         var(--t-sky-deep);
+  --md-typeset-a-color:         var(--t-sky-deep);
+
+  --md-text-font:  "IBM Plex Sans";
+  --md-code-font:  "JetBrains Mono";
+}
+
+/* Headings in the display face */
+.md-typeset h1, .md-typeset h2, .md-typeset h3,
+.md-typeset h4, .md-header__title {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.md-typeset h1 { color: var(--t-ink); font-size: 2.1rem; }
+.md-typeset h2 { margin-top: 2.4em; font-size: 1.5rem; }
+
+/* Body */
+body, .md-typeset { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+.md-typeset { font-size: .82rem; line-height: 1.72; color: var(--t-ink); }
+
+/* ---- Header (wordmark bar) ---- */
+.md-header { background: var(--t-navy); box-shadow: 0 1px 0 rgba(135,199,242,.12); }
+.md-header__title { font-family: "JetBrains Mono", monospace; font-weight: 500; letter-spacing: .01em; }
+
+/* Search box on navy */
+.md-search__input { background: rgba(255,255,255,.08); color: #fff; border: 1px solid rgba(135,199,242,.2); border-radius: 9px; }
+.md-search__input::placeholder { color: #8FA8C2; }
+
+/* ---- Left nav active state ---- */
+.md-nav__link--active, .md-nav__item .md-nav__link--active { color: var(--t-sky-deep); font-weight: 600; }
+.md-nav__item--section > .md-nav__link {
+  font-family: "JetBrains Mono", monospace; font-size: .62rem;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--t-muted);
+}
+
+/* ---- TOC (right) active ---- */
+.md-nav--secondary .md-nav__link--active { color: var(--t-sky-deep); }
+
+/* =============================================================
+   Code blocks — navy panel + Termina syntax palette
+   Works for any language (token classes are Pygments-generic).
+   ============================================================= */
+.md-typeset pre > code,
+.md-typeset .highlight pre {
+  background: var(--t-panel);
+  color: #D7E4F1;
+  border-radius: 13px;
+}
+.md-typeset .highlight { border-radius: 13px; box-shadow: 0 16px 40px rgba(12,30,55,.16); }
+.md-typeset code {
+  font-family: "JetBrains Mono", monospace;
+}
+/* inline code on light surface */
+.md-typeset :not(pre) > code {
+  background: var(--t-paper-2);
+  color: #1d3a5c;
+  border: 1px solid var(--t-hair);
+  border-radius: 6px;
+  padding: .1em .4em;
+}
+
+/* Pygments token → Termina palette (scoped to highlighted blocks) */
+.md-typeset .highlight .k,  .md-typeset .highlight .kd,
+.md-typeset .highlight .kn, .md-typeset .highlight .kr { color: #74AEEA; }        /* keyword */
+.md-typeset .highlight .kt, .md-typeset .highlight .nc,
+.md-typeset .highlight .nn, .md-typeset .highlight .nb { color: #57B8AE; }        /* type / class */
+.md-typeset .highlight .nf, .md-typeset .highlight .fm { color: #87C7F2; }        /* function */
+.md-typeset .highlight .mi, .md-typeset .highlight .mf,
+.md-typeset .highlight .mh, .md-typeset .highlight .il { color: #F2A33C; }        /* number */
+.md-typeset .highlight .s,  .md-typeset .highlight .s1,
+.md-typeset .highlight .s2, .md-typeset .highlight .sb { color: #7FC78C; }        /* string */
+.md-typeset .highlight .c,  .md-typeset .highlight .c1,
+.md-typeset .highlight .cm, .md-typeset .highlight .cs { color: #6E86A0; font-style: italic; }  /* comment */
+.md-typeset .highlight .nd { color: #B6A0E2; }                                    /* decorator/attribute */
+.md-typeset .highlight .o,  .md-typeset .highlight .p  { color: #AFC4DA; }        /* operator/punct */
+.md-typeset .highlight .n  { color: #D7E4F1; }                                    /* name */
+/* line numbers */
+.md-typeset .highlight .linenos, .md-typeset .highlight .lineno { color: #3D526A; }
+
+/* code title bar (when using ```lang title="file.termina") */
+.md-typeset .highlight > span[class^="filename"],
+.md-typeset .highlighttable .filename {
+  background: var(--t-navy-deep); color: #9FB6CE;
+  font-family: "JetBrains Mono", monospace; font-size: .68rem;
+  border-radius: 13px 13px 0 0;
+}
+
+/* =============================================================
+   Admonitions — Termina note / warning / tip
+   ============================================================= */
+.md-typeset .admonition, .md-typeset details {
+  border-radius: 11px; border-width: 1px; border-left-width: 4px;
+  font-size: .76rem; box-shadow: none;
+}
+.md-typeset .admonition-title { font-family: "Space Grotesk", sans-serif; font-weight: 600; }
+
+.md-typeset .admonition.note, .md-typeset .admonition.info {
+  border-color: #BBD9F2; border-left-color: var(--t-sky-deep); background: #EEF6FD;
+}
+.md-typeset .note > .admonition-title, .md-typeset .info > .admonition-title { background: rgba(44,111,166,.10); color: var(--t-sky-deep); }
+
+.md-typeset .admonition.warning, .md-typeset .admonition.important {
+  border-color: #EDD3AC; border-left-color: var(--t-amber); background: #FBF2E6;
+}
+.md-typeset .warning > .admonition-title, .md-typeset .important > .admonition-title { background: rgba(201,119,43,.12); color: var(--t-amber); }
+
+.md-typeset .admonition.tip, .md-typeset .admonition.success {
+  border-color: #BEE3CD; border-left-color: #2F8F5B; background: #EBF7F0;
+}
+.md-typeset .tip > .admonition-title, .md-typeset .success > .admonition-title { background: rgba(47,143,91,.12); color: #2F8F5B; }
+
+/* =============================================================
+   Tables
+   ============================================================= */
+.md-typeset table:not([class]) {
+  border: 1px solid var(--t-hair); border-radius: 12px; overflow: hidden; font-size: .74rem;
+}
+.md-typeset table:not([class]) th {
+  background: var(--t-paper-2); color: var(--t-navy);
+  font-family: "JetBrains Mono", monospace; font-size: .64rem;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+
+/* =============================================================
+   Buttons (.md-button) → brand
+   ============================================================= */
+.md-typeset .md-button {
+  border-radius: 11px; font-weight: 600; border-color: var(--t-hair);
+}
+.md-typeset .md-button--primary {
+  background: var(--t-sky-deep); border-color: var(--t-sky-deep); color: #fff;
+}
+.md-typeset .md-button--primary:hover { background: var(--t-navy); border-color: var(--t-navy); }
+
+/* footer */
+.md-footer, .md-footer-meta { background: var(--t-navy-deep); }

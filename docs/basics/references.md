@@ -99,11 +99,7 @@ to an array of two bytes, and the call supplies it by slicing a larger buffer:
 
     uint32_t driver() {
 
-        uint8_t buf[4U];
-        buf[0U] = 1U;
-        buf[1U] = 2U;
-        buf[2U] = 3U;
-        buf[3U] = 4U;
+        uint8_t buf[4U] = { 1U, 2U, 3U, 4U };
 
         return take2(&buf[1U]);
 
