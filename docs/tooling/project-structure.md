@@ -50,6 +50,7 @@ created project contains the following:
 app-file: app
 app-folder: app
 builder: make
+efp-folder: efp
 name: hello_world
 output-folder: output
 platform: posix-gcc
@@ -59,7 +60,8 @@ source-modules: src
 The `name` is the name of the project, and `platform` is the target it is built
 for. The remaining entries name the parts of the layout: the folder of the
 application module and the file within it, the folder of the source modules, the
-folder for the generated output, and the build tool used to compile that output.
+folder for the generated output, the folder reserved for analysis support files,
+and the build tool used to compile that output.
 
 Some features of the runtime are switched on here as well. Setting
 `enable-system-port` to `true` deploys the `system_entry` resource that provides

@@ -34,7 +34,7 @@ This setup provides a complete, fully functional environment for testing Termina
 
 ## Application architecture overview
 
-The architecture of the demo application we will be building in this introductory course is shown in Figure 1.
+The architecture of the demo application built in this tutorial is shown in Figure 1.
 
 <figure>
     
@@ -120,7 +120,7 @@ In our application, telecommands are simulated by entering strings through the s
 
 To determine whether a received telecommand is valid, we will implement a function named `accept_tc()`. In Termina, a function is a block of code that performs a computation and always terminates. Functions may take parameters and return values, but they cannot access global data directly. This restriction ensures that all information used by a function is passed explicitly, improving analyzability and preventing hidden side effects. Functions can receive parameters either by value or by reference, depending on whether the called code needs to modify the input data.
 
-In our case, the `accept_tc()` function will receive an immutable reference to a `TCDescriptor` object, meaning that the function can read the contents of the telecommand but cannot modify them. The function will return a value of type `Status<u32>`, one of Termina’s built-in monadic result types used to represent the outcome of an operation that may succeed or fail. The type argument `u32` indicates that the error information carried by a Failure value will be represented as an unsigned 32-bit integer. A value of `Success` signals that the telecommand was accepted, while `Failure(E)` indicates an error with code `E` of type `u32`.
+In our case, the `accept_tc()` function will receive an immutable reference to a `TCDescriptor` object, meaning that the function can read the contents of the telecommand but cannot modify them. The function will return a value of type `Status<u32>`, one of Termina's built-in result types used to represent the outcome of an operation that may succeed or fail. The type argument `u32` indicates that the error information carried by a Failure value will be represented as an unsigned 32-bit integer. A value of `Success` signals that the telecommand was accepted, while `Failure(E)` indicates an error with code `E` of type `u32`.
 
 The acceptance rule is simple: a telecommand is valid if the text it contains begins with the letter `v`. If the first character is `e`, the telecommand is considered incorrect and associated with error type `0`. Any other initial character results in error type `1`.
 
@@ -152,8 +152,7 @@ We will implement the function in a new module named `accept.fin`, located in th
 
     __status_uint32_t accept_tc(const TCDescriptor * const tc) {
 
-        __status_uint32_t status;
-        status.__variant = Success;
+        __status_uint32_t status = { .__variant = Success };
 
         if (tc->payload[0U] == 'e') {
 
@@ -554,19 +553,7 @@ The implementation of the telemetry resource will be done in a new module named 
         __termina_lock_t __lock = __termina_resource__lock(&__ev->owner,
                                                            &self->__lock_type);
 
-        char msg[12U];
-        msg[0U] = 'S';
-        msg[1U] = 'e';
-        msg[2U] = 'n';
-        msg[3U] = 'd';
-        msg[4U] = ' ';
-        msg[5U] = 'T';
-        msg[6U] = 'M';
-        msg[7U] = '(';
-        msg[8U] = '1';
-        msg[9U] = ',';
-        msg[10U] = '1';
-        msg[11U] = ')';
+        char msg[12U] = "Send TM(1,1)";
 
         self->system_port.println(__ev, 12U, msg);
 
@@ -584,39 +571,11 @@ The implementation of the telemetry resource will be done in a new module named 
         __termina_lock_t __lock = __termina_resource__lock(&__ev->owner,
                                                            &self->__lock_type);
 
-        char msg[27U];
-        msg[0U] = 'S';
-        msg[1U] = 'e';
-        msg[2U] = 'n';
-        msg[3U] = 'd';
-        msg[4U] = ' ';
-        msg[5U] = 'T';
-        msg[6U] = 'M';
-        msg[7U] = '(';
-        msg[8U] = '1';
-        msg[9U] = ',';
-        msg[10U] = '2';
-        msg[11U] = ')';
-        msg[12U] = ' ';
-        msg[13U] = '-';
-        msg[14U] = ' ';
-        msg[15U] = 'E';
-        msg[16U] = 'r';
-        msg[17U] = 'r';
-        msg[18U] = 'o';
-        msg[19U] = 'r';
-        msg[20U] = ' ';
-        msg[21U] = 'c';
-        msg[22U] = 'o';
-        msg[23U] = 'd';
-        msg[24U] = 'e';
-        msg[25U] = ':';
-        msg[26U] = ' ';
+        char msg[27U] = "Send TM(1,2) - Error code: ";
 
         self->system_port.print(__ev, 27U, msg);
 
-        SysPrintBase base;
-        base.__variant = SysPrintBase__Decimal;
+        SysPrintBase base = { .__variant = SysPrintBase__Decimal };
 
         self->system_port.println_u32(__ev, value, base);
 
@@ -635,29 +594,11 @@ The implementation of the telemetry resource will be done in a new module named 
         __termina_lock_t __lock = __termina_resource__lock(&__ev->owner,
                                                            &self->__lock_type);
 
-        char msg[15U];
-        msg[0U] = 'S';
-        msg[1U] = 'e';
-        msg[2U] = 'n';
-        msg[3U] = 'd';
-        msg[4U] = ' ';
-        msg[5U] = 'T';
-        msg[6U] = 'M';
-        msg[7U] = '(';
-        msg[8U] = '3';
-        msg[9U] = ',';
-        msg[10U] = '2';
-        msg[11U] = '5';
-        msg[12U] = ')';
-        msg[13U] = ':';
-        msg[14U] = ' ';
+        char msg[15U] = "Send TM(3,25): ";
 
-        SysPrintBase base;
-        base.__variant = SysPrintBase__Decimal;
+        SysPrintBase base = { .__variant = SysPrintBase__Decimal };
 
-        char comma[2U];
-        comma[0U] = ',';
-        comma[1U] = ' ';
+        char comma[2U] = ", ";
 
         self->system_port.print(__ev, 15U, msg);
 
@@ -724,7 +665,7 @@ The `system_entry` resource is not instantiated by default. Its deployment is co
 
 === "YAML"
     ```yaml
-    enable-system-port : true
+    enable-system-port: true
     ```
 
 When this option is set, the Termina runtime automatically instantiates and exposes the system_entry resource during system initialization. Once this feature has been enabled, the telemetry channel resource (`tm_channel`) can be deployed and connected to the system interface.
@@ -741,7 +682,7 @@ And then instantiate the resource and connect it to the runtime-provided system 
 === "Termina"
     ```termina
     resource tm_channel : CTMChannel = {
-        system <-> system_entry
+        system_port <-> system_entry
     };
     ```
 
@@ -914,8 +855,7 @@ The implementation of the resource will be done in a new module called `src/reso
         __termina_lock_t __lock = __termina_resource__lock(&__ev->owner,
                                                            &self->__lock_type);
 
-        __option_uint32_t opt_value;
-        opt_value.__variant = None;
+        __option_uint32_t opt_value = { .__variant = None };
 
         for (size_t i = 0U; i < 10U; i = i + 1U) {
 
@@ -1017,7 +957,7 @@ The housekeeping task is the active component responsible for executing the hous
 
 The housekeeping task encapsulates the logic that periodically triggers the housekeeping subsystem resource. It does not perform data collection or telemetry generation directly; instead, it calls the procedures provided by the passive `CHKSubsystem` resource. This separation reflects a common pattern in on-board software design: tasks handle scheduling and event reactions, while resources encapsulate functionality and shared data.
 
-The task will be defined in the file `tasks/housekeeping.fin`:
+The task will be defined in the file `src/tasks/housekeeping.fin`:
 
 === "Termina"
     ```termina
@@ -1079,7 +1019,7 @@ Then add the emitter and task instances at the end of the file:
 
 The periodic timer emitter `hk_timer` provides the time base that triggers the housekeeping process. It defines an internal field `period`, which specifies the emission interval using two components: `tv_sec` and `tv_usec` for the number of seconds and microseconds, respectively, between consecutive events. In this configuration, the timer generates an event every one second, emulating the periodic activation typical of housekeeping functions in real on-board control systems.
 
-The housekeeping task instance `hk_task` is declared using the `CHKTask` class. The annotation #[priority(20)] assigns it a fixed scheduling priority of 20. Task priorities determine their relative importance in the system’s scheduling policy and are defined statically at compile time.
+The housekeeping task instance `hk_task` is declared using the `CHKTask` class. The annotation `#[priority(20)]` assigns it a fixed scheduling priority of 20. Task priorities determine their relative importance in the system’s scheduling policy and are defined statically at compile time.
 
 The task defines two connections. The first binds the task’s access port to the passive housekeeping subsystem resource, allowing the task to invoke its procedures. Through this port, the task calls `update_params()` and `do_housekeeping()` on each activation, delegating all data handling and telemetry logic to the subsystem. The second connection links the task’s event sink timer to the periodic emitter `hk_timer`. This connection ensures that the task’s `hk_timeout` action is executed automatically each time the timer emits an event. In execution, the periodic timer generates a time event once per second. Each event activates the housekeeping task, which reacts by calling the procedures of the housekeeping subsystem resource.
 
@@ -1140,12 +1080,12 @@ The `CManagerTask` class defines three connection ports that link the task to ot
 
 The action `process_tc()` is the core of the task’s behavior. When a telecommand message is received, the runtime passes ownership of the `box TCDescriptor` object to the action. The task invokes the `accept_tc()` function, previously defined in the `lib.accept` module, to determine whether the telecommand is valid. The function returns a `Status<u32>` value: `Success` if the telecommand is accepted, or `Failure(code)` if it is rejected, with an error code of type `u32`.
 
-A match expression is used to handle the two possible cases explicitly:
+A match statement is used to handle the two possible cases explicitly:
 
 - If the result is `Failure(code)`, the task calls `send_tm_1_2(code)` on the telemetry channel to send a telecommand rejection report with the corresponding error code.
 - If the result is `Success`, the task calls `send_tm_1_1()` to send a telecommand acceptance report.
 
-Once processing is complete, the task releases the telecommand object by calling `self->tc_pool.free(tc)`. This operation returns the dynamically allocated memory block to the memory pool, ensuring that resources are reclaimed deterministically.
+Once processing is complete, the task releases the telecommand object by calling `self->tc_pool_port.free(tc)`. This operation returns the dynamically allocated memory block to the memory pool, ensuring that resources are reclaimed deterministically.
 
 The action then returns a `Status<i32>` value indicating the success of its execution. In this example, it always returns `Success`.
 
@@ -1204,7 +1144,7 @@ The `CKbdIRQHandler` class defines four ports that connect it to other system co
 
 - `system_port` is an access port to the SystemAPI interface provided by the runtime. It allows the handler to perform system-level operations, such as reading input from the standard input buffer.
 - `tc_pool_port` is an access port to the memory pool that manages the dynamic allocation of telecommand descriptors.
-- `kbd_irq_in` is an event sink that receives interrupts whenever data become available in the standard input buffer. Each interrupt triggers the `receive_tc()` action.
+- `in_kbd_irq` is an event sink that receives interrupts whenever data become available in the standard input buffer. Each interrupt triggers the `receive_tc()` action.
 - `tc_channel_out` is an output message port used to send the telecommand descriptor to the manager task via a message queue.
 The action `receive_tc()` implements the logic executed upon each interrupt. It first attempts to allocate a new telecommand descriptor from the memory pool. The allocation result is stored in an `Option<box TCDescriptor>`, which enforces explicit handling of success or failure cases:
   - If allocation succeeds (`Some(tc_desc)`), the handler reads up to 256 characters from the system input into the descriptor’s payload field and stores the number of valid characters in size.
@@ -1224,7 +1164,7 @@ The event corresponding to the keyboard interrupt is generated by a runtime-prov
 === "YAML"
     ```yaml
     platform-flags:
-    posix-gcc:
+      posix-gcc:
         enable-kbd-irq: true
     ```
 
@@ -1261,7 +1201,7 @@ Once the modules have been imported, we can now add the remaining elements at th
         tc_channel_out -> tc_channel
     };
 
-    #[priority(10: u32)]
+    #[priority(10)]
     task manager_task : CManagerTask = {
         tm_channel_port <-> tm_channel,
         tc_pool_port <-> tc_pool,
@@ -1275,13 +1215,13 @@ This code performs the following actions:
 - The message queue `tc_channel` is created to enable asynchronous communication between the interrupt handler and the manager task.
 - The keyboard interrupt handler `kbd_handler` connects its ports to the relevant components:
     - `system_port` connects to `system_entry`, giving the handler access to system calls for reading input data.
-    - `kbd_irq_in` is connected to the `kbd_irq` emitter, which triggers the interrupt events generated by the runtime.
+    - `in_kbd_irq` is connected to the `kbd_irq` emitter, which triggers the interrupt events generated by the runtime.
     - `tc_pool_port` links to the memory pool for descriptor allocation and deallocation.
     - `tc_channel_out` is connected to the telecommand message queue, enabling communication with the manager task.
 - The manager task `manager_task` is instantiated with a priority of 10. It connects its ports as follows:
     - `tm_channel_port` links to the telemetry channel resource for sending acknowledgment packets.
     - `tc_pool_port` links to the memory pool, allowing it to free processed telecommand descriptors.
-    - `tc_channel_in` connects to the telecommand message queue to receive incoming messages from the handler.
+    - `in_tc_channel` connects to the telecommand message queue to receive incoming messages from the handler.
 
 After these elements are deployed, the application architecture is complete.
 

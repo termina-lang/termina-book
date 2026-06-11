@@ -39,7 +39,7 @@ used with the WSL 2 backend.
 
 Once Docker is available, the image is retrieved with the following command.
 The `latest` tag tracks the most recent published release, while a specific
-version such as `v0.3.0` may be pinned instead in order to obtain a
+version such as `v0.4.0` may be pinned instead in order to obtain a
 reproducible environment, which is particularly convenient in a course where
 all participants must work with an identical setup:
 
@@ -185,13 +185,13 @@ $ curl -sSL https://get.haskellstack.org/ | sh
 It is not necessary to install a compiler manually. Stack reads the exact
 version required by the project from its `stack.yaml` file and downloads it
 automatically, so that a single `stack install` command suffices to produce the
-binary. The repository is cloned at the current release tag and then built;
-`stack install` places the resulting `termina` executable in Stack's local
-binary directory, which is `~/.local/bin` by default and should therefore be
-present in the `PATH`:
+binary. The repository is cloned at the current release tag, `v0.4.0` at the time of
+writing, and then built; `stack install` places the resulting `termina`
+executable in Stack's local binary directory, which is `~/.local/bin` by
+default and should therefore be present in the `PATH`:
 
 ```bash
-$ git clone --branch v0.3.2 https://github.com/termina-lang/termina.git
+$ git clone --branch v0.4.0 https://github.com/termina-lang/termina.git
 $ cd termina
 $ stack install
 ```
@@ -208,7 +208,7 @@ find the OSAL under `/opt/termina-osal`, and the most straightforward
 configuration is therefore to create a symbolic link at that location:
 
 ```bash
-$ git clone --branch v0.3.1 https://github.com/termina-lang/termina-osal.git
+$ git clone --branch v0.4.0 https://github.com/termina-lang/termina-osal.git
 $ sudo ln -s "$(pwd)/termina-osal" /opt/termina-osal
 ```
 
