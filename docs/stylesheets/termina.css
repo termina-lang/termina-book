@@ -126,7 +126,7 @@ body, .md-typeset { font-family: "IBM Plex Sans", system-ui, sans-serif; }
 }
 .md-typeset .highlight { border-radius: 13px; }
 /* copy-to-clipboard button: legible on the navy panel */
-.md-typeset .md-clipboard { color: rgba(135, 199, 242, .8); }
+.md-typeset .md-clipboard { background: transparent !important; box-shadow: none !important; color: rgba(135, 199, 242, .45); }
 .md-typeset .md-clipboard:hover,
 .md-typeset .highlight:hover .md-clipboard { color: var(--t-sky); }
 .md-typeset code {
