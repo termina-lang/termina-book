@@ -135,7 +135,7 @@ body, .md-typeset { font-family: "IBM Plex Sans", system-ui, sans-serif; }
 .md-typeset .md-code__button:hover,
 .md-typeset .highlight:hover .md-code__button,
 .md-typeset .md-clipboard:hover,
-.md-typeset .highlight:hover .md-clipboard { color: var(--t-sky); }
+.md-typeset .highlight:hover .md-clipboard { color: rgba(135, 199, 242, .8); }
 .md-typeset code {
   font-family: "JetBrains Mono", monospace;
 }
