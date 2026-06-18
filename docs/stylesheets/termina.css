@@ -126,7 +126,14 @@ body, .md-typeset { font-family: "IBM Plex Sans", system-ui, sans-serif; }
 }
 .md-typeset .highlight { border-radius: 13px; }
 /* copy-to-clipboard button: legible on the navy panel */
+/* Material >=9.6 renamed it to .md-code__nav (the box) + .md-code__button (the icon);
+   older versions used .md-clipboard. The nav box blends with the panel; the icon
+   stays faint and brightens on hover. */
+.md-typeset .md-code__nav { background: transparent !important; box-shadow: none !important; }
+.md-typeset .md-code__button,
 .md-typeset .md-clipboard { background: transparent !important; box-shadow: none !important; color: rgba(135, 199, 242, .45); }
+.md-typeset .md-code__button:hover,
+.md-typeset .highlight:hover .md-code__button,
 .md-typeset .md-clipboard:hover,
 .md-typeset .highlight:hover .md-clipboard { color: var(--t-sky); }
 .md-typeset code {
