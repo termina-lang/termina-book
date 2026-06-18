@@ -106,8 +106,8 @@ useful effect.
 ## Located arrays
 
 A located field may also be an array, which suits devices that expose a
-region of memory rather than a record of registers: a bank of RAM, a frame
-buffer, a DMA window. The driver below covers a 4-KiB bank:
+region of memory rather than a record of registers, for example a bank of
+RAM, a frame buffer, or a DMA window. The driver below covers a 4-KiB bank:
 
 === "Termina"
     ```termina
@@ -166,10 +166,7 @@ accesses must not interleave. Because the driver is a resource, the transpiler
 applies the protection analysis described in the reactive model: a driver used
 by several tasks is serialized with a priority-ceiling mutex, and one shared
 between a task and an interrupt handler is protected by disabling the
-interrupt. The `#[unprotected]` annotation is not applicable here, since it is
-reserved for resources without data fields and a located field counts as one;
-a driver's register accesses always run under the protection the analysis
-selects.
+interrupt.
 
 A complete driver typically combines the elements of this chapter with two
 that earlier chapters introduced: a handler wired to the device's hardware

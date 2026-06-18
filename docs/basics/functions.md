@@ -94,6 +94,12 @@ analyzable; the chapter devoted to references examines them in detail. For the
 purpose of this chapter, it is sufficient that a reference may be used to pass a
 value to a function for reading or writing.
 
+Parameters are immutable bindings, like a `let`. The body may read a parameter
+but not assign a new value to it; the attempt is rejected with the same error as
+reassigning an immutable variable. A `&mut T` parameter does not change this: it
+permits the *referenced* object to be modified, while the parameter binding
+itself stays immutable.
+
 ## Unused parameters
 
 The rule that every binding must be used, introduced in the chapter on
@@ -147,8 +153,8 @@ definition:
     ```
 
 Because the size is part of the parameter type, the transpiler rejects a call
-that supplies an array of any other length, and the same constant serves as
-the bound of the loop that walks the array. When only a leading portion of a
+that supplies an array of any other length, and the same constant bounds
+the loop that walks the array. When only a leading portion of a
 larger buffer holds meaningful data, the caller passes a slice of the expected
 size, as described in the chapter on references, and the position up to which
 the data is valid travels in a separate parameter.

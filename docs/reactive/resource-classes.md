@@ -68,8 +68,9 @@ methods of the class.
 ## Procedures
 
 A procedure is an operation that the resource exposes through one of its
-interfaces. A procedure always takes `&mut self`, since calling it may change the
-resource's state, and its body ends with a `return` statement. The procedures of
+interfaces, and its body ends with a `return` statement. A procedure takes
+`&mut self` when it may modify the resource's state, or `&self` when it only
+reads it; in either case the call runs under mutual exclusion. The procedures of
 `CCounter` translate as follows:
 
 === "Termina"

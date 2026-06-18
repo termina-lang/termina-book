@@ -394,7 +394,7 @@ initializer:
 
 Programs frequently need named values that do not change: error codes, array
 sizes, configuration parameters, default initializers. Termina provides two
-mechanisms for this purpose, and the distinction between them matters.
+mechanisms for this purpose: `const` and `constexpr`.
 
 ### Runtime constants
 
@@ -416,7 +416,9 @@ an actual symbol that can be inspected during debugging.
 Runtime constants are typically used for error codes, status identifiers, and
 other fixed parameters that are referenced throughout the application. A
 `const` can be used anywhere a value of its type is expected, including as an
-array size.
+array size. When it appears as an array size, the transpiler folds it to its
+literal value in the generated dimension, so the array remains a fixed-size
+object and the C code contains no variable-length array.
 
 ### Compile-time constant expressions
 
@@ -579,6 +581,15 @@ absence cannot be ignored without explicitly writing code for it. This section
 introduces their definitions and basic usage, including the `match` statement
 and the `is` operator for inspecting variants.
 
+These types are instantiated by supplying a type argument between angle
+brackets: `Option<u32>` is an optional `u32`, `Status<i32>` an outcome whose
+failure carries an `i32`, and `Result<u32; i32>` a computation that returns a
+`u32` or fails with an `i32`. The argument may be a primitive type, a struct,
+or an enumeration. The transpiler generates a separate C type for each
+distinct instantiation, with a name derived from the arguments, such as
+`__option_uint32_t`, `__status_int32_t`, and `__result_uint32__int32_t`; these
+are the types shown in the C tabs that follow.
+
 ### Option
 
 `Option<T>` represents a value that may or may not be present. It has exactly
@@ -588,10 +599,10 @@ two variants:
 - `None` indicates the absence of a value.
 
 In C, optional values are typically represented by null pointers, sentinel
-values such as `-1`, or boolean flags paired with output parameters. All of
-these approaches share the same problem: the caller can forget to check.
-`Option` makes the possibility of absence explicit in the type, and the
-transpiler refuses to compile code that does not handle both cases.
+values such as `-1`, or boolean flags paired with output parameters, none of
+which forces the caller to check for a missing value. `Option` makes the
+possibility of absence explicit in the type, and the transpiler refuses to
+compile code that does not handle both cases.
 
 === "Termina"
     ```termina
@@ -665,7 +676,6 @@ tasks and handlers.
     result.Error.__0 = -(1L);
     ```
 
-The distinction between `Status<T>` and `Result<T; E>` is important.
 `Status<T>` is for operations that either succeed with no output or fail with
 an error. `Result<T; E>` is for operations that, when they succeed, need to
 return a meaningful value to the caller. If a function computes something and
