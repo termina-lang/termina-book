@@ -11,7 +11,8 @@ MISRA-compliant C that runs on RTEMS, FreeRTOS, and POSIX systems.
 ## A first taste
 
 A Termina application is a set of components that react to events. The
-following task prints a message once per second, driven by a periodic timer:
+following task class defines such a component, whose `timeout` action runs in
+response to the events received on its timer port and prints a message:
 
 ```termina
 task class CHelloWorldTask {
@@ -34,8 +35,9 @@ task class CHelloWorldTask {
 };
 ```
 
-The chapter [Hello, Real-Time World!](started/hello-world.md) builds and runs
-this program step by step.
+The chapter [Hello, Real-Time World!](started/hello-world.md) connects an
+instance of this class to a periodic timer, so that the message prints once per
+second, and then builds and runs the program step by step.
 
 ## How the book is organized
 
@@ -46,9 +48,7 @@ this program step by step.
 | [Language Basics](basics/types.md) | Types, variables, expressions, control flow, functions, and references. |
 | [The Reactive Model](reactive/overview.md) | Tasks, handlers, and resources: the components of a Termina system. |
 | [Communication and Memory](comm/ports-and-channels.md) | Ports, channels, message passing, and deterministic memory management. |
-| [The Application Module](wiring/application-module.md) | Assembling the system: instances, connections, and annotations. |
-| [Memory-Mapped I/O](advanced/memory-mapped-io.md) | Writing device drivers with located fields. |
-| [Platforms and the OSAL](platforms/osal.md) | The execution stack and the supported target platforms. |
+| [Systems and Platforms](wiring/application-module.md) | Assembling the application module, writing device drivers with memory-mapped I/O, and the platforms and OSAL the system runs on. |
 | [Tooling](tooling/project-structure.md) | Project layout, the build system, and debugging. |
 | [Appendix](appendix/keywords.md) | Reference tables: keywords, operators, built-in types, conventions. |
 

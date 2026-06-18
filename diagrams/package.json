@@ -1,0 +1,7 @@
+{
+  "name": "termina-book-diagrams",
+  "private": true,
+  "description": "ELK (elkjs) layout + SVG renderer for the book's structural diagrams.",
+  "scripts": { "render": "node render.js" },
+  "dependencies": { "elkjs": "^0.9.3" }
+}

@@ -92,29 +92,14 @@ The following diagram brings the pieces together: events flow from emitters
 into the reactive entities, messages travel between entities through channels,
 and shared state is reached through resources.
 
-```mermaid
-%%{init: {"theme": "base", "themeVariables": {"fontFamily": "IBM Plex Sans, sans-serif", "fontSize": "15px", "primaryColor": "#EEF6FD", "primaryBorderColor": "#2C6FA6", "primaryTextColor": "#15243A", "lineColor": "#2C6FA6", "edgeLabelBackground": "#FFFFFF"}, "flowchart": {"curve": "linear", "nodeSpacing": 55, "rankSpacing": 65, "padding": 10}}}%%
-flowchart LR
-    timer([Periodic timer]) -- "event (sink)" --> task1[Task]
-    irq([Interrupt]) -- "event (sink)" --> handler[Handler]
-    handler -- "message (out)" --> queue[(Channel)]
-    queue -- "message (in)" --> task2[Task]
-    task1 -- "access" --> res[[Resource]]
-    handler -- "access" --> res
-    task2 -- "access" --> res
-    classDef emitter fill:#0B2140,stroke:#0B2140,color:#E9F2FB
-    classDef entity fill:#EEF6FD,stroke:#2C6FA6,stroke-width:1.5px,color:#15243A
-    classDef channel fill:#FBF2E6,stroke:#A35D17,stroke-width:1.5px,color:#15243A
-    classDef store fill:#E4F2F0,stroke:#0E8077,stroke-width:1.5px,color:#15243A
-    class timer,irq emitter
-    class task1,task2,handler entity
-    class queue channel
-    class res store
-```
+<figure markdown="span">
+![Reactive model overview](../diagrams/reactive-overview.svg){ .diagram }
+<figcaption>Events, messages, and shared-state access between the components of a Termina system</figcaption>
+</figure>
 
 ## Communication, and freedom from deadlock
 
-Components interact in only two ways. They share data through resources
+Components interact in only two ways: they share data through resources
 accessible via ports, and they exchange messages asynchronously through
 channels, which are bounded message queues. There is no shared mutable global
 state outside of resources, and no synchronous rendezvous between components.

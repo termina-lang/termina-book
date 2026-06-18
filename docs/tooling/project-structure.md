@@ -80,24 +80,10 @@ platform-flags:
 Building a project is a two-stage process: the transpiler turns the Termina
 sources into C, and the platform's build system turns that C into a program.
 
-```mermaid
-%%{init: {"theme": "base", "themeVariables": {"fontFamily": "IBM Plex Sans, sans-serif", "fontSize": "15px", "primaryColor": "#EEF6FD", "primaryBorderColor": "#2C6FA6", "primaryTextColor": "#15243A", "lineColor": "#2C6FA6", "edgeLabelBackground": "#FFFFFF"}, "flowchart": {"curve": "linear", "nodeSpacing": 55, "rankSpacing": 65, "padding": 10}}}%%
-flowchart LR
-    src["<b>.fin</b> sources<br><small>app/ + src/</small>"] --> tb["termina build"]
-    cfg["termina.yaml"] --> tb
-    tb --> out["C sources + Makefile<br><small>output/</small>"]
-    out --> mk["make"]
-    osal["OSAL + toolchain"] --> mk
-    mk --> bin["executable or image"]
-    classDef emitter fill:#0B2140,stroke:#0B2140,color:#E9F2FB
-    classDef entity fill:#EEF6FD,stroke:#2C6FA6,stroke-width:1.5px,color:#15243A
-    classDef channel fill:#FBF2E6,stroke:#A35D17,stroke-width:1.5px,color:#15243A
-    classDef store fill:#E4F2F0,stroke:#0E8077,stroke-width:1.5px,color:#15243A
-    class src,cfg entity
-    class tb,mk emitter
-    class out,osal channel
-    class bin store
-```
+<figure markdown="span">
+![Building a project](../diagrams/build-stages.svg){ .diagram }
+<figcaption>The two build stages: termina build, then make</figcaption>
+</figure>
 
 The first stage is transpilation,
 carried out by the `build` command from the project's root directory:

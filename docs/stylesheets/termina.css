@@ -40,6 +40,24 @@
 /* Mermaid: center diagrams and keep them off the hairline borders */
 .md-typeset .mermaid { text-align: center; margin: 1.6em 0; }
 
+/* Structural diagrams (committed SVGs) embedded as images */
+.md-typeset img.diagram { display: block; margin: 1.6em auto; max-width: 100%; height: auto; }
+
+/* Numbered figures with captions (per page) */
+.md-typeset { counter-reset: figure; }
+.md-typeset figure { counter-increment: figure; margin: 1.8em auto; text-align: center; }
+.md-typeset figure img.diagram, .md-typeset figure .mermaid { margin: 0 auto; }
+.md-typeset figure > figcaption { font-size: .82rem; color: #5B6B82; margin: .55em auto 0; max-width: 42rem; }
+.md-typeset figure > figcaption::before { content: "Figure " counter(figure) ". "; font-weight: 700; color: #15243A; }
+
+/* Lightbox: click a diagram to view it large in an overlay (see lightbox.js) */
+.diagram-lightbox { position: fixed; inset: 0; z-index: 1000; display: none;
+  align-items: center; justify-content: center; padding: 2.5vmin;
+  background: rgba(11, 33, 64, .82); cursor: zoom-out; }
+.diagram-lightbox.open { display: flex; }
+.diagram-lightbox img { max-width: 96vw; max-height: 95vh; background: #fff;
+  border-radius: 8px; box-shadow: 0 12px 48px rgba(0, 0, 0, .45); padding: 12px; }
+
 /* Headings in the display face */
 .md-typeset h1, .md-typeset h2, .md-typeset h3,
 .md-typeset h4, .md-header__title {
@@ -106,7 +124,7 @@ body, .md-typeset { font-family: "IBM Plex Sans", system-ui, sans-serif; }
   color: #D7E4F1;
   border-radius: 13px;
 }
-.md-typeset .highlight { border-radius: 13px; box-shadow: 0 16px 40px rgba(12,30,55,.16); }
+.md-typeset .highlight { border-radius: 13px; }
 .md-typeset code {
   font-family: "JetBrains Mono", monospace;
 }
@@ -136,6 +154,7 @@ body, .md-typeset { font-family: "IBM Plex Sans", system-ui, sans-serif; }
 .md-typeset .highlight .ow { color: #AFC4DA; }                                    /* operator/punct */
 .md-typeset .highlight .n,  .md-typeset .highlight .nx,
 .md-typeset .highlight .ne, .md-typeset .highlight .err { color: #D7E4F1; }       /* name / fallback */
+.md-typeset .highlight .nt, .md-typeset .highlight .na { color: #87C7F2; }        /* markup/YAML keys, attributes */
 .md-typeset .highlight .nv, .md-typeset .highlight .vc,
 .md-typeset .highlight .vg, .md-typeset .highlight .vi,
 .md-typeset .highlight .vm { color: #BBDDF7; }                                    /* variables ($PWD) */

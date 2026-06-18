@@ -11,7 +11,8 @@ nav:
   - Getting Started:
     - Installation: started/install.md
     - Hello, Real-Time World!: started/hello-world.md
-  - Building Our First Application: tutorial.md
+  - Building Our First Application:
+    - A Guided Tour: tutorial.md
   - Language Basics:
     - Types and Constants: basics/types.md
     - Variables and Mutability: basics/variables.md
@@ -27,9 +28,10 @@ nav:
   - Communication and Memory:
     - Ports and Channels: comm/ports-and-channels.md
     - Memory Management: comm/memory.md
-  - The Application Module: wiring/application-module.md
-  - Memory-Mapped I/O: advanced/memory-mapped-io.md
-  - Platforms and the OSAL: platforms/osal.md
+  - Systems and Platforms:
+    - The Application Module: wiring/application-module.md
+    - Memory-Mapped I/O: advanced/memory-mapped-io.md
+    - Platforms and the OSAL: platforms/osal.md
   - Tooling:
     - Project Structure and Build System: tooling/project-structure.md
     - Debugging: tooling/debugging.md
@@ -62,6 +64,9 @@ theme:
 
 extra_css:
   - stylesheets/termina.css
+
+extra_javascript:
+  - javascripts/lightbox.js
 
 markdown_extensions:
   - admonition

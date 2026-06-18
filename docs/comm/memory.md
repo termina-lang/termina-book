@@ -101,20 +101,10 @@ The life of a block is summarized by the following diagram: it leaves the
 pool through `alloc`, is owned by exactly one component at a time, may change
 hands through a channel, and returns to the pool through `free`.
 
-```mermaid
-%%{init: {"theme": "base", "themeVariables": {"fontFamily": "IBM Plex Sans, sans-serif", "fontSize": "15px", "primaryColor": "#EEF6FD", "primaryBorderColor": "#2C6FA6", "primaryTextColor": "#15243A", "lineColor": "#2C6FA6", "edgeLabelBackground": "#FFFFFF"}, "flowchart": {"curve": "linear", "nodeSpacing": 55, "rankSpacing": 65, "padding": 10}}}%%
-flowchart LR
-    pool[("Pool")] -- "alloc &rarr; Some(box)" --> owner["owned by the<br>allocating entity"]
-    owner -- "send (transfer)" --> recv["owned by the<br>receiving entity"]
-    owner -- "free" --> pool
-    recv -- "free" --> pool
-    classDef emitter fill:#0B2140,stroke:#0B2140,color:#E9F2FB
-    classDef entity fill:#EEF6FD,stroke:#2C6FA6,stroke-width:1.5px,color:#15243A
-    classDef channel fill:#FBF2E6,stroke:#A35D17,stroke-width:1.5px,color:#15243A
-    classDef store fill:#E4F2F0,stroke:#0E8077,stroke-width:1.5px,color:#15243A
-    class pool store
-    class owner,recv entity
-```
+<figure markdown="span">
+![The life of a box](../diagrams/box-life.svg){ .diagram }
+<figcaption>The life of a box: allocated from a pool, transferred through a channel, and freed</figcaption>
+</figure>
 
 A block is consumed in one of two ways. The first is to release it explicitly,
 returning it to the pool with `free`:
