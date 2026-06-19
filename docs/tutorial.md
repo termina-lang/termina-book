@@ -503,15 +503,15 @@ The implementation of the telemetry resource will be done in a new module named 
         procedure send_tm_3_25(&mut self, hk_data : &[u32; hk_data_size]) {
 
             // Handle TM_2_25 telemetry
-            let msg : [char; 15] = "Send TM(3,25): ";
+            let msg : [char; 32] = "Send TM(3,25): ";
             let base : SysPrintBase = SysPrintBase::Decimal;
-            let comma : [char; 2] = ", ";
 
-            self->system_port.print(15, &msg);
+            self->system_port.print(&msg);
 
             for i : usize in 0 .. (hk_data_size - 1) {
                 self->system_port.print_u32(hk_data[i], base);
-                self->system_port.print(2, &comma);
+                self->system_port.print_char(',');
+                self->system_port.print_char(' ');
             }
             self->system_port.println_u32(hk_data[hk_data_size - 1], base);
 
@@ -521,8 +521,8 @@ The implementation of the telemetry resource will be done in a new module named 
 
         procedure send_tm_1_1(&mut self) {
 
-            let msg : [char; 12] = "Send TM(1,1)";
-            self->system_port.println(12, &msg);
+            let msg : [char; 32] = "Send TM(1,1)";
+            self->system_port.println(&msg);
                     
             return;
 
@@ -530,8 +530,8 @@ The implementation of the telemetry resource will be done in a new module named 
 
         procedure send_tm_1_2(&mut self, value : u32) {
 
-            let msg : [char; 27] = "Send TM(1,2) - Error code: ";
-            self->system_port.print(27, &msg);
+            let msg : [char; 32] = "Send TM(1,2) - Error code: ";
+            self->system_port.print(&msg);
             let base : SysPrintBase = SysPrintBase::Decimal;
             self->system_port.println_u32(value, base);
 
@@ -553,9 +553,9 @@ The implementation of the telemetry resource will be done in a new module named 
         __termina_lock_t __lock = __termina_resource__lock(&__ev->owner,
                                                            &self->__lock_type);
 
-        char msg[12U] = "Send TM(1,1)";
+        char msg[32U] = "Send TM(1,1)";
 
-        self->system_port.println(__ev, 12U, msg);
+        self->system_port.println(__ev, msg);
 
         __termina_resource__unlock(&__ev->owner, &self->__lock_type, __lock);
 
@@ -571,9 +571,9 @@ The implementation of the telemetry resource will be done in a new module named 
         __termina_lock_t __lock = __termina_resource__lock(&__ev->owner,
                                                            &self->__lock_type);
 
-        char msg[27U] = "Send TM(1,2) - Error code: ";
+        char msg[32U] = "Send TM(1,2) - Error code: ";
 
-        self->system_port.print(__ev, 27U, msg);
+        self->system_port.print(__ev, msg);
 
         SysPrintBase base = { .__variant = SysPrintBase__Decimal };
 
@@ -594,13 +594,11 @@ The implementation of the telemetry resource will be done in a new module named 
         __termina_lock_t __lock = __termina_resource__lock(&__ev->owner,
                                                            &self->__lock_type);
 
-        char msg[15U] = "Send TM(3,25): ";
+        char msg[32U] = "Send TM(3,25): ";
 
         SysPrintBase base = { .__variant = SysPrintBase__Decimal };
 
-        char comma[2U] = ", ";
-
-        self->system_port.print(__ev, 15U, msg);
+        self->system_port.print(__ev, msg);
 
         for (size_t i = 0U; i < 9U; i = i + 1U) {
 
@@ -608,7 +606,8 @@ The implementation of the telemetry resource will be done in a new module named 
                                                                              i)],
                                         base);
 
-            self->system_port.print(__ev, 2U, comma);
+            self->system_port.print_char(__ev, ',');
+            self->system_port.print_char(__ev, ' ');
 
         }
 
@@ -666,9 +665,10 @@ The `system_entry` resource is not instantiated by default. Its deployment is co
 === "YAML"
     ```yaml
     enable-system-port: true
+    sys-print-output-buffer-size: 32
     ```
 
-When this option is set, the Termina runtime automatically instantiates and exposes the system_entry resource during system initialization. Once this feature has been enabled, the telemetry channel resource (`tm_channel`) can be deployed and connected to the system interface.
+When this option is set, the Termina runtime automatically instantiates and exposes the `system_entry` resource during system initialization. Console output and input operate over fixed-size buffers: `print` and `println` take a reference to a `[char; N]` array, where `N` is the `sys-print-output-buffer-size` value, and `read` fills a `[char; M]` array whose size is `sys-read-input-buffer-size`. Both default to 256 bytes. The telemetry messages here are short, so the output buffer is reduced to 32 in the configuration above, while the input buffer keeps its default of 256 for the telecommand payload. The message buffers are therefore declared as `[char; 32]`; shorter strings are padded with `'\0'` and printed up to the first null. Once this feature has been enabled, the telemetry channel resource (`tm_channel`) can be deployed and connected to the system interface.
 
 To do this, first import the telemetry channel module in the main application file `app/app.fin`:
 
@@ -1095,6 +1095,15 @@ The keyboard interrupt handler is a reactive component that runs whenever input 
 
 This handler is responsible for simulating the reception of a telecommand through a keyboard interrupt. When triggered, it reads input characters from the console, stores them in a newly allocated telecommand descriptor, and forwards the descriptor to the manager task through a message queue. Dynamic memory allocation and message passing are both performed deterministically using Termina’s memory pools and typed communication channels.
 
+On the `posix-gcc` platform the keyboard interrupt emitter `kbd_irq` is not available unless it is enabled in `termina.yaml`. Add the following so the runtime raises an event whenever data becomes available on standard input:
+
+=== "YAML"
+    ```yaml
+    platform-flags:
+      posix-gcc:
+        enable-kbd-irq: true
+    ```
+
 The complete implementation of the handler is shown below:
 
 === "Termina"
@@ -1119,7 +1128,7 @@ The complete implementation of the handler is shown below:
             match opt_tc_desc {
                 case Some(tc_desc) => {
 
-                    self->system_port.read(256, &mut tc_desc.payload, &mut tc_desc.size);
+                    self->system_port.read(&mut tc_desc.payload, &mut tc_desc.size);
                     if tc_desc.size > 0 {
                         self->tc_channel_out.send(tc_desc);
                     } else {

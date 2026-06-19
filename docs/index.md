@@ -23,10 +23,10 @@ task class CHelloWorldTask {
 
     action timeout(&priv self, _current_time : TimeVal) -> Status<i32> {
 
-        let msg : [char; 128] = "Hello, Real-Time World!";
+        let msg : [char; 32] = "Hello, Real-Time World!";
         let ret : Status<i32> = Success;
 
-        self->system_port.println(128, &msg);
+        self->system_port.println(&msg);
 
         return ret;
 

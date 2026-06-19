@@ -73,10 +73,10 @@ of this example is defined in a new module located at
 
         action timeout(&priv self, _current_time : TimeVal) -> Status<i32> {
 
-            let msg : [char; 128] = "Hello, Real-Time World!";
+            let msg : [char; 32] = "Hello, Real-Time World!";
             let ret : Status<i32> = Success;
 
-            self->system_port.println(128, &msg);
+            self->system_port.println(&msg);
 
             return ret;
 
@@ -97,8 +97,8 @@ the console.
 
 The action `timeout` constitutes the entire behavior of the task. It declares
 a fixed-length character array initialized with the message to be displayed and
-invokes the `println` procedure of the system port to print it, passing the
-size of the array together with a reference to it. The action returns a value
+invokes the `println` procedure of the system port to print it, passing a
+reference to it. The action returns a value
 of type `Status<i32>`, one of the built-in result types of the language, which
 indicates whether the action completed successfully or encountered an error. In
 this example it always returns `Success`.
@@ -161,6 +161,7 @@ the following line:
 === "YAML"
     ```yaml
     enable-system-port: true
+    sys-print-output-buffer-size: 32
     ```
 
 When this option is set, the runtime instantiates and exposes the
