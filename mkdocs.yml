@@ -1,6 +1,6 @@
 site_name: The Termina Book
 site_description: A programming language for real-time critical systems
-site_url: https://termina-lang.github.io/termina-book/
+site_url: https://termina-lang.org/book/
 repo_url: https://github.com/termina-lang/termina
 repo_name: termina-lang/termina
 copyright: "&copy; The Termina Project Contributors"
